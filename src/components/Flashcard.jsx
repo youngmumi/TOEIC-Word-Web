@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../styles/Flashcard.css'
 
 function Flashcard({ word }) {
   const [flipped, setFlipped] = useState(false)
+
+  useEffect(() => {
+    setFlipped(false)
+  }, [word])
 
   return (
     <div className="flashcard-container" onClick={() => setFlipped(!flipped)}>
