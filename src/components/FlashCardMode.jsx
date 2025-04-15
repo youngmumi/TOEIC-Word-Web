@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import wordList from "./wordList";
-import "./FlashCardMode.css"; // 별도 CSS 파일에서 스타일 불러옴
+import wordList from "../data/wordList";
+import "../styles/FlashCardMode.css"; 
 
 const FlashCardMode = () => {
   const [index, setIndex] = useState(0);
@@ -27,7 +27,7 @@ const FlashCardMode = () => {
 
   return (
     <div className="container">
-      <h1 className="title">📘 토익 영단어</h1>
+      <h1 className="title">📘 토익 영단어 📘</h1>
       <Flashcard word={wordList[index]} />
       <div className="button-group">
         <button onClick={prevCard}>⬅️ 이전</button>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import wordList from "./wordList";
+import wordList from "../data/wordList";
 
 const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
