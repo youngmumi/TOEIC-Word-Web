@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import wordList from "../data/wordList";
+import "../styles/TestMode.css"
 
 const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
@@ -31,23 +32,23 @@ const TestMode = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto text-center">
-      <p className="text-lg font-semibold mb-4">
+    <div className="test-container">
+      <p className="test-question">
         {index + 1}. {currentWord.english}
       </p>
-      <div className="space-y-2">
+      <div>
         {choices.map((choice) => (
           <button
             key={choice}
             onClick={() => handleSelect(choice)}
-            className={`w-full p-2 rounded border ${
+            className={`test-choice ${
               showAnswer
                 ? choice === currentWord.korean
-                  ? "bg-green-200"
+                  ? "correct"
                   : choice === selected
-                  ? "bg-red-200"
-                  : "bg-white"
-                : "bg-blue-50 hover:bg-blue-100"
+                  ? "wrong"
+                  : ""
+                : ""
             }`}
             disabled={showAnswer}
           >
@@ -56,17 +57,12 @@ const TestMode = () => {
         ))}
       </div>
       {showAnswer && (
-        <div className="mt-4">
+        <div className="test-answer">
           <p>정답: <strong>{currentWord.korean}</strong></p>
-          <button
-            onClick={nextQuestion}
-            className="mt-2 bg-black text-white px-4 py-1 rounded"
-          >
-            다음
-          </button>
+          <button onClick={nextQuestion} className="test-next-btn">다음</button>
         </div>
       )}
-      <p className="mt-4">점수: {score}</p>
+      <p className="test-score">점수: {score}</p>
     </div>
   );
 };

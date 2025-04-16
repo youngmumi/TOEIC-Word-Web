@@ -51,6 +51,8 @@ const wordList = [
   { english: "schedule", korean: "일정, 일정 잡다" },
   { english: "strategy", korean: "전략" },
 
+  
+
   { english: "account", korean: "계좌, 설명하다" },
   { english: "acquire", korean: "획득하다" },
   { english: "adjust", korean: "조정하다" },
