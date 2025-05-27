@@ -1,17 +1,9 @@
 import React, { useState } from "react";
 import wordList from "../data/wordList";
-import "../styles/FlashCardMode.css"; 
+import "../styles/FlashCardMode.css";
 
 const FlashCardMode = () => {
   const [index, setIndex] = useState(0);
-
-  const getRandomIndex = () => {
-    let newIndex;
-    do {
-      newIndex = Math.floor(Math.random() * wordList.length);
-    } while (newIndex === index);
-    return newIndex;
-  };
 
   const nextCard = () => {
     setIndex((prev) => (prev + 1) % wordList.length);
@@ -22,7 +14,11 @@ const FlashCardMode = () => {
   };
 
   const randomCard = () => {
-    setIndex(getRandomIndex());
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * wordList.length);
+    } while (newIndex === index);
+    setIndex(newIndex);
   };
 
   return (
@@ -30,23 +26,41 @@ const FlashCardMode = () => {
       <h1 className="title">📘 토익 영단어 📘</h1>
       <Flashcard word={wordList[index]} />
       <div className="button-group">
-        <button onClick={prevCard}>⬅️ 이전</button>
-        <button onClick={nextCard}>다음 ➡️</button>
-        <button onClick={randomCard}>🔀 랜덤</button>
+        <button onClick={prevCard} aria-label="이전 단어">⬅️ 이전</button>
+        <button onClick={nextCard} aria-label="다음 단어">다음 ➡️</button>
+        <button onClick={randomCard} aria-label="랜덤 단어">🔀 랜덤</button>
       </div>
     </div>
   );
 };
 
 const Flashcard = ({ word }) => {
-  const [flipped, setFlipped] = useState(false);
+  const [flipped, setFlipped] = React.useState(false);
 
-  const toggleFlip = () => {
-    setFlipped(!flipped);
+  React.useEffect(() => {
+    setFlipped(false);
+  }, [word]);
+
+  const toggleFlip = () => setFlipped((f) => !f);
+
+  // 키보드 접근성용 핸들러
+  const onKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleFlip();
+    }
   };
 
   return (
-    <div className={`flashcard ${flipped ? "flipped" : ""}`} onClick={toggleFlip}>
+    <div
+      className={`flashcard ${flipped ? "flipped" : ""}`}
+      onClick={toggleFlip}
+      role="button"
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+      aria-pressed={flipped}
+      aria-label={flipped ? `${word.korean} 뜻` : `${word.english} 단어`}
+    >
       <div className="flashcard-inner">
         <div className="flashcard-front">{word.english}</div>
         <div className="flashcard-back">{word.korean}</div>
@@ -56,6 +70,3 @@ const Flashcard = ({ word }) => {
 };
 
 export default FlashCardMode;
-
-
-
