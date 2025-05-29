@@ -2,29 +2,34 @@ import React, { useState } from "react";
 import wordList from "../data/wordList";
 import "../styles/FlashCardMode.css";
 
-const FlashCardMode = () => {
+const PAGE_SIZE = 25;
+
+const FlashCardMode = ({ page = 0 }) => {
+  const startIndex = page * PAGE_SIZE;
+  const pageWords = wordList.slice(startIndex, startIndex + PAGE_SIZE);
+
   const [index, setIndex] = useState(0);
 
   const nextCard = () => {
-    setIndex((prev) => (prev + 1) % wordList.length);
+    setIndex((prev) => (prev + 1) % pageWords.length);
   };
 
   const prevCard = () => {
-    setIndex((prev) => (prev - 1 + wordList.length) % wordList.length);
+    setIndex((prev) => (prev - 1 + pageWords.length) % pageWords.length);
   };
 
   const randomCard = () => {
     let newIndex;
     do {
-      newIndex = Math.floor(Math.random() * wordList.length);
+      newIndex = Math.floor(Math.random() * pageWords.length);
     } while (newIndex === index);
     setIndex(newIndex);
   };
 
   return (
     <div className="container">
-      <h1 className="title">📘 토익 영단어 📘</h1>
-      <Flashcard word={wordList[index]} />
+      <h1 className="title">📘 토익 영단어 - Day {page + 1} 📘</h1>
+      <Flashcard word={pageWords[index]} />
       <div className="button-group">
         <button onClick={prevCard} aria-label="이전 단어">⬅️ 이전</button>
         <button onClick={nextCard} aria-label="다음 단어">다음 ➡️</button>
@@ -43,7 +48,6 @@ const Flashcard = ({ word }) => {
 
   const toggleFlip = () => setFlipped((f) => !f);
 
-  // 키보드 접근성용 핸들러
   const onKeyDown = (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();

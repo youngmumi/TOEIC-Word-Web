@@ -182,6 +182,7 @@ const wordList = [
   { english: "warehouse", korean: "창고" },
   { english: "warranty", korean: "보증" },
   { english: "wholesale", korean: "도매" },
+  { english: "", korean: " "}
 ]
 
 export default wordList;

@@ -11,13 +11,19 @@ const shuffle = (arr) => {
   return copy;
 };
 
-const TestMode = () => {
+const PAGE_SIZE = 25;
+
+const TestMode = ({ page = 0 }) => {
+  const startIndex = page * PAGE_SIZE;
+  const pageWords = wordList.slice(startIndex, startIndex + PAGE_SIZE);
+
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
+  const [quizEnded, setQuizEnded] = useState(false);
 
-  const currentWord = wordList[index];
+  const currentWord = pageWords[index];
 
   const choices = useMemo(() => {
     const wrongChoices = shuffle(wordList)
@@ -37,8 +43,34 @@ const TestMode = () => {
   const nextQuestion = () => {
     setSelected(null);
     setShowAnswer(false);
-    setIndex((prev) => (prev + 1) % wordList.length);
+    if (index + 1 < pageWords.length) {
+      setIndex(index + 1);
+    } else {
+      setQuizEnded(true);
+    }
   };
+
+  if (quizEnded) {
+    return (
+      <div className="test-container">
+        <h2>퀴즈 완료!</h2>
+        <p>
+          점수: {score} / {pageWords.length}
+        </p>
+        <button
+          onClick={() => {
+            setIndex(0);
+            setScore(0);
+            setSelected(null);
+            setShowAnswer(false);
+            setQuizEnded(false);
+          }}
+        >
+          다시 시작하기
+        </button>
+      </div>
+    );
+  }
 
   const getChoiceClass = (choice) => {
     if (!showAnswer) return "";
